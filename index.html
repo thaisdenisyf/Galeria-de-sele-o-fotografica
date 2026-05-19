@@ -9,7 +9,7 @@
     <!-- Lucide Icons para ícones modernos -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Importação das novas fontes sofisticadas: Cormorant Garamond (Editorial Serif) e Plus Jakarta Sans */
+        /* Importação das fontes sofisticadas: Cormorant Garamond (Editorial Serif) e Plus Jakarta Sans */
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
         
         body {
@@ -84,6 +84,11 @@
 
             <!-- BOTÕES & SELEÇÃO (Alinhados perfeitamente à direita) -->
             <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                <!-- Botão para Clientes Acederem direto da Home (Texto Alterado!) -->
+                <button id="clientAccessBtn" onclick="openClientLogin()" class="bg-white text-black hover:bg-neutral-200 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider transition-all flex items-center gap-1.5 min-h-[36px] sm:min-h-[40px]">
+                    <i data-lucide="image" class="w-3.5 h-3.5"></i> Selecionar minhas fotos
+                </button>
+
                 <button id="adminBtn" onclick="openAdminLoginModal()" class="border border-neutral-800 text-neutral-400 hover:text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider transition-all flex items-center gap-1 sm:gap-1.5 min-h-[36px] sm:min-h-[40px] whitespace-nowrap">
                     <i data-lucide="lock" class="w-3 sm:w-3.5 h-3 sm:h-3.5"></i> Área da Fotógrafa
                 </button>
@@ -103,10 +108,45 @@
     </header>
 
     <!-- CONTEÚDO PRINCIPAL -->
-    <main class="flex-grow py-6 px-4">
+    <main class="flex-grow py-6">
         
-        <!-- 1. TELA DE LOGIN DO CLIENTE -->
-        <section id="clientAuthSection" class="max-w-md mx-auto my-6 sm:my-12 px-5 py-8 sm:py-10 bg-neutral-950 border border-neutral-900 rounded-2xl shadow-2xl animate-fade-in">
+        <!-- ================= 0. PÁGINA INICIAL / PORTFÓLIO DE ENSAIOS ================= -->
+        <section id="homeSection" class="max-w-7xl mx-auto px-4 py-8 animate-fade-in">
+            <!-- Hero de Apresentação -->
+            <div class="text-center max-w-2xl mx-auto my-12 sm:my-20">
+                <span class="text-xs font-semibold tracking-[0.3em] text-neutral-500 uppercase">Fotografia Artística & Sentimento</span>
+                <h2 class="font-serif-title text-5xl sm:text-6xl text-white mt-4 mb-6 leading-tight">Escrever histórias com luz e afeto.</h2>
+                <p class="text-sm sm:text-base text-neutral-400 leading-relaxed font-light mb-8">
+                    Capturo a verdade de cada abraço, o brilho de cada olhar e a leveza do espontâneo. O sentimento eterno traduzido em memórias vivas.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="openClientLogin()" class="bg-white text-black hover:bg-neutral-200 px-8 py-3.5 rounded-lg font-semibold tracking-wide transition-all text-sm shadow-xl flex items-center justify-center gap-2">
+                        Selecionar minhas fotos <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Divisor elegante -->
+            <div class="w-16 h-[1px] bg-neutral-800 mx-auto my-16"></div>
+
+            <!-- Galeria de Portfólio Dinâmica -->
+            <div class="space-y-8">
+                <div class="text-center sm:text-left flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-neutral-500 font-semibold">Trabalhos Recentes</span>
+                        <h3 class="font-serif-title text-3xl sm:text-4xl text-white mt-1">O Nosso Portfólio</h3>
+                    </div>
+                </div>
+
+                <!-- Grid Dinâmico do Portfólio -->
+                <div id="portfolioGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+                    <!-- Fotos do portfólio serão injetadas aqui -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 1. TELA DE LOGIN DO CLIENTE ================= -->
+        <section id="clientAuthSection" class="hidden max-w-md mx-auto my-12 px-5 py-8 sm:py-10 bg-neutral-950 border border-neutral-900 rounded-2xl shadow-2xl animate-fade-in">
             <div class="text-center mb-6 sm:mb-8">
                 <span class="text-xs font-semibold tracking-widest text-neutral-500 uppercase">Portal de Seleção</span>
                 <h2 class="font-serif-title text-3xl sm:text-4xl text-white mt-1 mb-2">Aceder ao Ensaio</h2>
@@ -124,14 +164,19 @@
                     <input type="text" id="galleryCodeInput" required placeholder="Ex: CASAMENTO-MARIA" 
                         class="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3.5 text-white placeholder-neutral-600 focus:outline-none focus:border-white transition-all text-sm uppercase font-mono min-h-[48px]">
                 </div>
-                <button type="submit" class="w-full bg-white text-black hover:bg-neutral-200 py-3.5 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 text-sm min-h-[48px]">
-                    Ver Minhas Fotos <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="goToHome()" class="flex-1 border border-neutral-800 text-neutral-400 hover:text-white py-3.5 rounded-lg text-sm font-semibold transition-all">
+                        Voltar à Home
+                    </button>
+                    <button type="submit" class="flex-1 bg-white text-black hover:bg-neutral-200 py-3.5 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 text-sm min-h-[48px]">
+                        Entrar <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
             </form>
         </section>
 
-        <!-- 2. GALERIA DO CLIENTE -->
-        <section id="clientGallerySection" class="hidden max-w-7xl mx-auto">
+        <!-- ================= 2. GALERIA DO CLIENTE ================= -->
+        <section id="clientGallerySection" class="hidden max-w-7xl mx-auto px-4">
             <!-- Banner de Boas-Vindas -->
             <div class="bg-neutral-950 border border-neutral-900 rounded-2xl p-5 md:p-8 mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div class="text-center md:text-left">
@@ -190,29 +235,39 @@
             </div>
         </section>
 
-        <!-- 3. PAINEL DE CONTROLE ADMINISTRATIVO -->
-        <section id="adminDashboardSection" class="hidden max-w-7xl mx-auto">
+        <!-- ================= 3. PAINEL DE CONTROLE ADMINISTRATIVO ================= -->
+        <section id="adminDashboardSection" class="hidden max-w-7xl mx-auto px-4">
+            <!-- Topo do Admin -->
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8 border-b border-neutral-900 pb-6">
                 <div>
                     <span class="text-xs font-semibold tracking-widest text-neutral-400 uppercase">Espaço da Fotógrafa</span>
                     <h2 class="font-serif-title text-3xl sm:text-4xl text-white mt-1">Painel Admin</h2>
                 </div>
-                <div class="flex gap-3 w-full sm:w-auto">
-                    <button onclick="showCreateGalleryForm()" class="flex-1 sm:flex-initial bg-white text-black hover:bg-neutral-200 px-4 py-3 rounded-lg text-xs font-bold tracking-wider transition-all flex items-center justify-center gap-1.5 min-h-[44px]">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Nova Galeria
+                <div class="flex flex-wrap gap-2.5 w-full sm:w-auto">
+                    <!-- Alternadores de Sub-Abas do Painel -->
+                    <button onclick="switchAdminTab('galleries')" id="btnTabGalleries" class="flex-1 sm:flex-initial bg-white text-black px-4 py-2.5 rounded-lg text-xs font-bold transition-all min-h-[44px]">
+                        Gerir Clientes
                     </button>
-                    <button onclick="logoutAdmin()" class="border border-neutral-800 text-red-400 hover:bg-red-950/20 px-4 py-3 rounded-lg text-xs font-bold tracking-wider transition-all min-h-[44px]">
+                    <button onclick="switchAdminTab('portfolio')" id="btnTabPortfolio" class="flex-1 sm:flex-initial bg-neutral-900 text-neutral-400 border border-neutral-800 px-4 py-2.5 rounded-lg text-xs font-bold transition-all min-h-[44px]">
+                        Gerir Portfólio (Home)
+                    </button>
+                    <button onclick="logoutAdmin()" class="border border-neutral-800 text-red-400 hover:bg-red-950/20 px-4 py-2.5 rounded-lg text-xs font-bold tracking-wider transition-all min-h-[44px]">
                         Sair do Painel
                     </button>
                 </div>
             </div>
 
-            <!-- Grid Administrativo -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in">
+            <!-- SUB-ABA 1: GESTÃO DE CLIENTES & ENSAIOS -->
+            <div id="adminTabGalleriesContent" class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in">
                 <div class="lg:col-span-2 space-y-6">
-                    <h3 class="font-serif-title text-xl text-white flex items-center gap-2">
-                        <i data-lucide="folder" class="text-neutral-400"></i> Galerias Ativas
-                    </h3>
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-serif-title text-xl text-white flex items-center gap-2">
+                            <i data-lucide="folder" class="text-neutral-400"></i> Galerias Ativas
+                        </h3>
+                        <button onclick="showCreateGalleryForm()" class="bg-white text-black hover:bg-neutral-200 px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider transition-all flex items-center gap-1.5 min-h-[36px]">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Nova Galeria
+                        </button>
+                    </div>
                     <div id="adminGalleriesList" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <!-- Injetado dinamicamente -->
                     </div>
@@ -225,6 +280,24 @@
                     <div id="adminSubmissionsList" class="space-y-4 max-h-[600px] overflow-y-auto pr-1">
                         <!-- Injetado dinamicamente -->
                     </div>
+                </div>
+            </div>
+
+            <!-- SUB-ABA 2: GESTÃO DO PORTFÓLIO DA PÁGINA INICIAL -->
+            <div id="adminTabPortfolioContent" class="hidden space-y-6 animate-fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-serif-title text-2xl text-white">Fotos em Exibição na Home</h3>
+                        <p class="text-xs text-neutral-400">Gerencie os ensaios de destaque exibidos no portfólio de abertura.</p>
+                    </div>
+                    <button onclick="showAddPortfolioForm()" class="bg-white text-black hover:bg-neutral-200 px-4 py-2.5 rounded-lg text-xs font-bold tracking-wider transition-all flex items-center gap-1.5 min-h-[44px]">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Adicionar Foto
+                    </button>
+                </div>
+
+                <!-- Lista de Fotos Ativas do Portfólio -->
+                <div id="adminPortfolioList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Injetado via JS -->
                 </div>
             </div>
         </section>
@@ -312,6 +385,59 @@
         </div>
     </div>
 
+    <!-- MODAL DE CADASTRO DE FOTO NO PORTFÓLIO -->
+    <div id="portfolioCreatorModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-neutral-950 border border-neutral-900 rounded-2xl max-w-lg w-full p-6 relative my-8">
+            <button type="button" onclick="closeAddPortfolioForm()" class="absolute top-4 right-4 text-neutral-400 hover:text-white p-2 min-h-[40px] min-w-[40px]">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <h3 class="font-serif-title text-2xl text-white mb-2">Adicionar ao Portfólio</h3>
+            <p class="text-xs text-neutral-400 mb-6 font-medium">Esta imagem ficará em destaque na vitrine inicial do seu site.</p>
+            
+            <form onsubmit="savePortfolioPhoto(event)" class="space-y-4 text-sm">
+                <div>
+                    <label class="block text-xs uppercase text-neutral-400 mb-1 font-semibold">Título do Ensaio</label>
+                    <input type="text" id="newPortTitle" required placeholder="Ex: Casamento Luana & Thiago" 
+                        class="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase text-neutral-400 mb-1 font-semibold">Subtítulo / Categoria</label>
+                    <input type="text" id="newPortCategory" required placeholder="Ex: Casamento ao Ar Livre / Estúdio" 
+                        class="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-white">
+                </div>
+
+                <!-- Upload de ficheiro local para portfólio -->
+                <div class="border-2 border-dashed border-neutral-800 hover:border-neutral-500 rounded-xl p-6 text-center transition-all bg-neutral-900/20 relative">
+                    <input type="file" id="newPortFile" accept="image/*" onchange="handlePortfolioFileUpload(event)"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                    <div id="portUploadPlaceholder" class="space-y-2 pointer-events-none">
+                        <div class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto">
+                            <i data-lucide="upload-cloud" class="text-neutral-400 w-5 h-5"></i>
+                        </div>
+                        <p class="text-xs text-neutral-300 font-semibold">Escolher foto do telemóvel/computador</p>
+                    </div>
+                    <div id="portUploadFeedback" class="hidden text-xs text-green-400 font-semibold flex items-center justify-center gap-1.5 pointer-events-none">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i> Imagem carregada do dispositivo!
+                    </div>
+                </div>
+
+                <!-- Ou URL/Google Drive -->
+                <div>
+                    <label class="block text-xs uppercase text-neutral-400 mb-1 font-semibold">Ou Link Direto / Google Drive (Opcional)</label>
+                    <input type="text" id="newPortUrl" placeholder="Cole o link do Google Drive ou link .jpg" 
+                        class="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-white font-mono text-xs">
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="closeAddPortfolioForm()" class="flex-1 border border-neutral-800 text-neutral-400 hover:text-white py-2.5 rounded-lg font-medium min-h-[44px]">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-white text-black hover:bg-neutral-200 py-2.5 rounded-lg font-bold min-h-[44px]">Salvar Portfólio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- LIGHTBOX / ZOOM DA FOTO EM ECRÃ INTEIRO (Otimizado para Toque) -->
     <div id="lightbox" class="fixed inset-0 bg-black/95 z-50 hidden flex flex-col justify-between p-4 bg-opacity-95">
         <!-- Barra superior -->
@@ -378,7 +504,14 @@
 
     <!-- LÓGICA DO APLICATIVO COM PERSISTÊNCIA NUVEM/LOCALSTORAGE COMPATÍVEL -->
     <script>
-        // --- BANCO DE DADOS DE EXEMPLO ---
+        // --- PORTFÓLIO PADRÃO DE EXEMPLO ---
+        const defaultPortfolio = [
+            { id: 101, title: "Casamento Júlia & Rafael", category: "Casamento ao Ar Livre", url: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" },
+            { id: 102, title: "Beatriz Nogueira", category: "Ensaio Feminino / Moda", url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" },
+            { id: 103, title: "Família Vasconcellos", category: "Ensaio de Família", url: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80" }
+        ];
+
+        // --- BANCO DE DADOS DE EXEMPLO (CLIENTES) ---
         const defaultGalleries = [
             {
                 code: "DEMO-01",
@@ -393,8 +526,10 @@
         ];
 
         // Estado global do aplicativo
+        let portfolio = JSON.parse(localStorage.getItem('thais_portfolio')) || defaultPortfolio;
         let galleries = JSON.parse(localStorage.getItem('thais_galleries')) || defaultGalleries;
         let selections = JSON.parse(localStorage.getItem('thais_selections')) || [];
+        let tempPortfolioFileBase64 = ""; // Cache para upload da foto de portfólio
         
         let currentActiveGallery = null;
         let clientSelections = new Set();
@@ -433,6 +568,12 @@
             if (!localStorage.getItem('thais_galleries')) {
                 localStorage.setItem('thais_galleries', JSON.stringify(defaultGalleries));
             }
+            if (!localStorage.getItem('thais_portfolio')) {
+                localStorage.setItem('thais_portfolio', JSON.stringify(defaultPortfolio));
+            }
+
+            // Sempre carrega a Home Dinâmica primeiro
+            renderHomePortfolio();
         };
 
         // Gesto de deslizar
@@ -448,13 +589,11 @@
         // --- CONVERSOR DE LINKS DO GOOGLE DRIVE CORRIGIDO ---
         function convertGoogleDriveLink(url) {
             url = url.trim();
-            // Regex completa para capturar o ID de arquivos do Google Drive
             const driveRegExp = /(?:https?:\/\/)?(?:drive\.google\.com\/)(?:file\/d\/|open\?id=)([^/\?&]+)/;
             const match = url.match(driveRegExp);
             
             if (match && match[1]) {
                 const fileId = match[1];
-                // RETORNA O ENDEREÇO DA API DE IMAGEM DO GOOGLE QUE IGNORA BLOQUEIO DE COOKIES E CORS
                 return `https://lh3.googleusercontent.com/d/${fileId}`;
             }
             return url;
@@ -491,7 +630,60 @@
             });
         }
 
-        // --- ÁREA DO CLIENTE ---
+        // --- 0. LÓGICA DA PÁGINA INICIAL / PORTFÓLIO ---
+
+        function renderHomePortfolio() {
+            const grid = document.getElementById('portfolioGrid');
+            grid.innerHTML = '';
+
+            if (portfolio.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center border border-dashed border-neutral-800 rounded-2xl bg-neutral-950 px-4">
+                        <i data-lucide="camera" class="w-10 h-10 text-neutral-600 mx-auto mb-3"></i>
+                        <h4 class="text-white font-medium mb-1">Nenhum ensaio destacado</h4>
+                        <p class="text-xs text-neutral-500">Acesse a Área da Fotógrafa para adicionar fotos de destaque ao seu portfólio.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            portfolio.forEach((photo) => {
+                const card = document.createElement('div');
+                card.className = "photo-card relative group bg-neutral-950 border border-neutral-900 rounded-2xl overflow-hidden aspect-[3/4]";
+                card.innerHTML = `
+                    <img src="${photo.url}" alt="${photo.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700 select-none">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30 opacity-80 group-hover:opacity-90 transition-opacity flex flex-col justify-end p-6">
+                        <span class="text-[10px] tracking-[0.2em] text-neutral-400 uppercase font-semibold">${photo.category}</span>
+                        <h4 class="font-serif-title text-2xl sm:text-3xl text-white mt-1.5 leading-tight">${photo.title}</h4>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function openClientLogin() {
+            // Oculta a Home e mostra login do cliente
+            document.getElementById('homeSection').classList.add('hidden');
+            document.getElementById('clientAuthSection').classList.remove('hidden');
+            document.getElementById('clientAccessBtn').classList.add('hidden');
+        }
+
+        function goToHome() {
+            // Redireciona tudo para a Home portfólio
+            document.getElementById('clientAuthSection').classList.add('hidden');
+            document.getElementById('clientGallerySection').classList.add('hidden');
+            document.getElementById('adminDashboardSection').classList.add('hidden');
+            document.getElementById('selectionStatusHeader').classList.add('hidden');
+            
+            document.getElementById('homeSection').classList.remove('hidden');
+            document.getElementById('clientAccessBtn').classList.remove('hidden');
+            
+            renderHomePortfolio();
+        }
+
+        // --- 1. ÁREA DO CLIENTE ---
 
         function handleClientLogin(e) {
             e.preventDefault();
@@ -521,6 +713,7 @@
             document.getElementById('clientAuthSection').classList.add('hidden');
             document.getElementById('clientGallerySection').classList.remove('hidden');
             document.getElementById('selectionStatusHeader').classList.remove('hidden');
+            document.getElementById('clientAccessBtn').classList.add('hidden');
             
             document.getElementById('clientDisplayInfo').innerText = `${clientName} | Galeria: ${foundGallery.code}`;
             document.getElementById('galleryTitleDisplay').innerText = `Ensaio ${foundGallery.clientName}`;
@@ -693,7 +886,6 @@
             let txt = `*THAÍS DENISY FOTOGRAFIA*\n`;
             txt += `-------------------------\n`;
             txt += `*Cliente:* ${currentActiveGallery.clientRealName}\n`;
-            txt += `*Galeria:* ${currentActiveGallery.code}\n`;
             txt += `*Quantidade:* ${selectedCodes.length} fotos\n`;
             txt += `-------------------------\n\n`;
             txt += `*FOTOS SELECIONADAS:*\n`;
@@ -718,38 +910,27 @@
             }
         }
 
-        async function goToHome() {
-            if (currentActiveGallery) {
-                const confirmed = await showCustomConfirm(
-                    "Sair da Seleção", 
-                    "Deseja voltar para a tela inicial? As suas escolhas já foram gravadas."
-                );
-                if (confirmed) {
-                    resetClientState();
-                }
-            } else if (isAdminLoggedIn) {
-                document.getElementById('adminDashboardSection').classList.add('hidden');
-                document.getElementById('clientAuthSection').classList.remove('hidden');
-                isAdminLoggedIn = false;
+        // --- 2. PAINEL ADMINISTRATIVO E ABAS ---
+
+        function switchAdminTab(tabName) {
+            const btnGalleries = document.getElementById('btnTabGalleries');
+            const btnPortfolio = document.getElementById('btnTabPortfolio');
+            const contentGalleries = document.getElementById('adminTabGalleriesContent');
+            const contentPortfolio = document.getElementById('adminTabPortfolioContent');
+
+            if (tabName === 'galleries') {
+                btnGalleries.className = "flex-1 sm:flex-initial bg-white text-black px-4 py-2.5 rounded-lg text-xs font-bold transition-all min-h-[44px]";
+                btnPortfolio.className = "flex-1 sm:flex-initial bg-neutral-900 text-neutral-400 border border-neutral-800 px-4 py-2.5 rounded-lg text-xs font-bold transition-all min-h-[44px]";
+                contentGalleries.classList.remove('hidden');
+                contentPortfolio.classList.add('hidden');
+            } else {
+                btnGalleries.className = "flex-1 sm:flex-initial bg-neutral-900 text-neutral-400 border border-neutral-800 px-4 py-2.5 rounded-lg text-xs font-bold transition-all min-h-[44px]";
+                btnPortfolio.className = "flex-1 sm:flex-initial bg-white text-black px-4 py-2.5 rounded-lg text-xs font-bold transition-all min-h-[44px]";
+                contentGalleries.classList.add('hidden');
+                contentPortfolio.classList.remove('hidden');
+                renderAdminPortfolio(); // Carrega a aba de fotos do portfólio
             }
         }
-
-        function resetClientState() {
-            currentActiveGallery = null;
-            clientSelections.clear();
-            document.getElementById('clientNotes').value = '';
-            document.getElementById('clientGallerySection').classList.add('hidden');
-            document.getElementById('selectionStatusHeader').classList.add('hidden');
-            document.getElementById('mobileSelectionHUD').classList.add('translate-y-32');
-            document.getElementById('clientAuthSection').classList.remove('hidden');
-            document.getElementById('clientLoginForm').reset();
-        }
-
-        function scrollToSelection() {
-            document.getElementById('reviewSection').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // --- PAINEL ADMINISTRATIVO (ÁREA SECRETA) ---
 
         function openAdminLoginModal() {
             document.getElementById('adminLoginModal').classList.remove('hidden');
@@ -768,11 +949,17 @@
                 isAdminLoggedIn = true;
                 closeAdminLoginModal();
                 
+                // Ocultar outras seções
+                document.getElementById('homeSection').classList.add('hidden');
                 document.getElementById('clientAuthSection').classList.add('hidden');
                 document.getElementById('clientGallerySection').classList.add('hidden');
                 document.getElementById('selectionStatusHeader').classList.add('hidden');
+                document.getElementById('clientAccessBtn').classList.add('hidden');
+
+                // Mostrar o painel de administração
                 document.getElementById('adminDashboardSection').classList.remove('hidden');
 
+                switchAdminTab('galleries');
                 renderAdminDashboard();
                 showToast("Painel de Gestão Carregado!");
             } else {
@@ -783,7 +970,7 @@
         function logoutAdmin() {
             isAdminLoggedIn = false;
             document.getElementById('adminDashboardSection').classList.add('hidden');
-            document.getElementById('clientAuthSection').classList.remove('hidden');
+            goToHome();
             showToast("Sessão finalizada.");
         }
 
@@ -791,6 +978,120 @@
             renderAdminGalleries();
             renderAdminSubmissions();
         }
+
+        // --- GESTÃO DE PORTFÓLIO ---
+
+        function renderAdminPortfolio() {
+            const list = document.getElementById('adminPortfolioList');
+            list.innerHTML = '';
+
+            if (portfolio.length === 0) {
+                list.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-neutral-500 text-xs">
+                        Nenhuma foto no portfólio. Adicione fotos para aparecerem na Home.
+                    </div>
+                `;
+                return;
+            }
+
+            portfolio.forEach((photo) => {
+                const card = document.createElement('div');
+                card.className = "bg-neutral-950 border border-neutral-900 rounded-xl overflow-hidden p-4 flex flex-col justify-between gap-4";
+                card.innerHTML = `
+                    <div class="aspect-[3/4] overflow-hidden rounded-lg relative">
+                        <img src="${photo.url}" class="w-full h-full object-cover" alt="Foto">
+                    </div>
+                    <div>
+                        <h4 class="font-serif-title text-lg text-white font-bold leading-tight truncate">${photo.title}</h4>
+                        <p class="text-xs text-neutral-400 mt-1">${photo.category}</p>
+                    </div>
+                    <div class="flex pt-2 border-t border-neutral-900 justify-end">
+                        <button onclick="deletePortfolioPhoto(${photo.id})" class="text-red-400 hover:bg-red-950/20 px-3 py-1.5 rounded-md text-xs transition-all flex items-center gap-1">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Eliminar
+                        </button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function showAddPortfolioForm() {
+            document.getElementById('portfolioCreatorModal').classList.remove('hidden');
+        }
+
+        function closeAddPortfolioForm() {
+            document.getElementById('portfolioCreatorModal').classList.add('hidden');
+            document.getElementById('newPortTitle').value = '';
+            document.getElementById('newPortCategory').value = '';
+            document.getElementById('newPortUrl').value = '';
+            document.getElementById('newPortFile').value = '';
+            
+            document.getElementById('portUploadPlaceholder').classList.remove('hidden');
+            document.getElementById('portUploadFeedback').classList.add('hidden');
+            tempPortfolioFileBase64 = "";
+        }
+
+        function handlePortfolioFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                tempPortfolioFileBase64 = e.target.result;
+                document.getElementById('portUploadPlaceholder').classList.add('hidden');
+                document.getElementById('portUploadFeedback').classList.remove('hidden');
+                showToast("Imagem preparada!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function savePortfolioPhoto(e) {
+            e.preventDefault();
+            const title = document.getElementById('newPortTitle').value.trim();
+            const category = document.getElementById('newPortCategory').value.trim();
+            const urlText = document.getElementById('newPortUrl').value.trim();
+
+            let finalUrl = "";
+
+            if (tempPortfolioFileBase64) {
+                finalUrl = tempPortfolioFileBase64;
+            } else if (urlText) {
+                finalUrl = convertGoogleDriveLink(urlText);
+            } else {
+                showCustomAlert("Por favor, selecione um arquivo ou cole um link válido.");
+                return;
+            }
+
+            const newItem = {
+                id: Date.now(),
+                title: title,
+                category: category,
+                url: finalUrl
+            };
+
+            portfolio.push(newItem);
+            localStorage.setItem('thais_portfolio', JSON.stringify(portfolio));
+
+            closeAddPortfolioForm();
+            renderAdminPortfolio();
+            showToast("Nova foto adicionada ao portfólio!");
+        }
+
+        async function deletePortfolioPhoto(id) {
+            const confirmed = await showCustomConfirm(
+                "Remover do Portfólio",
+                "Tem certeza de que deseja remover esta foto da página inicial?"
+            );
+            if (confirmed) {
+                portfolio = portfolio.filter(p => p.id !== id);
+                localStorage.setItem('thais_portfolio', JSON.stringify(portfolio));
+                renderAdminPortfolio();
+                showToast("Foto removida.");
+            }
+        }
+
+        // --- GESTÃO DE CLIENTES / GALERIAS ---
 
         function renderAdminGalleries() {
             const list = document.getElementById('adminGalleriesList');
@@ -953,6 +1254,20 @@
                 
                 renderAdminDashboard();
                 showToast("Galeria removida.");
+            }
+        }
+
+        function copySubmissionData(code, clientName) {
+            const sel = selections.find(s => s.clientCode === code && s.clientName === clientName);
+            if (sel) {
+                const text = `FOTOS SELECIONADAS (${sel.clientName}): ${sel.selectedCodes.join(', ')}`;
+                const tempInput = document.createElement("textarea");
+                tempInput.value = text;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+                showToast("Lista copiada!");
             }
         }
 
