@@ -59,10 +59,15 @@
             <div class="flex items-center gap-2 sm:gap-3 cursor-pointer animate-fade-in" onclick="goToHome()">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-black rounded-full overflow-hidden relative border border-neutral-800 hover:border-neutral-500 transition-all flex-shrink-0">
                     <svg viewBox="0 0 200 200" class="w-full h-full text-white fill-none stroke-current" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Círculos de foco artístico -->
                         <circle cx="100" cy="100" r="75" stroke-width="1.2" class="opacity-60" />
                         <circle cx="100" cy="100" r="45" stroke-width="0.8" stroke-dasharray="3 3" class="opacity-30" />
+                        
+                        <!-- Letra T Caligráfica Minimalista -->
                         <path d="M 65,75 L 135,75" stroke-width="4.5" stroke-linecap="round" />
                         <path d="M 100,75 L 100,135" stroke-width="4.5" stroke-linecap="round" />
+                        
+                        <!-- Mini ponto/Lente centralizada representando sentimento/brilho -->
                         <circle cx="100" cy="105" r="7" stroke-width="1.5" />
                         <circle cx="140" cy="62" r="2.5" fill="white" class="stroke-0" />
                     </svg>
@@ -292,10 +297,11 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs uppercase text-neutral-400 mb-1 font-semibold">Links das Fotos do Ensaio (Um por linha)</label>
-                    <textarea id="newGalUrls" required rows="8" placeholder="Cole os links .jpg das imagens enviadas para o seu servidor ou hospedagem pública. Ex:&#10;https://i.imgur.com/link1.jpg&#10;https://i.imgur.com/link2.jpg" 
+                    <label class="block text-xs uppercase text-neutral-400 mb-1 font-semibold">Links das Fotos ou Google Drive (Um por linha)</label>
+                    <textarea id="newGalUrls" required rows="8" placeholder="Cole os links do Google Drive ou links diretos .jpg/png. Ex:&#10;https://drive.google.com/file/d/ID_AQUI/view?usp=sharing&#10;https://i.imgur.com/outro.jpg" 
                         class="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-white font-mono text-xs"></textarea>
-                    <p class="text-[10px] text-neutral-500 mt-1">Carregue as fotos originais em plataformas gratuitas como <strong>Postimages.org</strong> ou <strong>Imgur</strong> e cole aqui os "Links Diretos" (terminados em .jpg ou .png).</p>
+                    <p class="text-[10px] text-neutral-500 mt-1">💡 Você pode colar links de compartilhamento direto do <strong>Google Drive</strong>! O sistema os converte automaticamente para exibição.</p>
+                    <p class="text-[10px] text-red-400 mt-0.5">⚠️ Importante: Garanta que as fotos/pastas estejam marcadas no Drive como <strong>"Qualquer pessoa com o link pode ver"</strong>.</p>
                 </div>
 
                 <div class="pt-2 flex gap-3">
@@ -437,6 +443,21 @@
             if (touchendX > touchstartX + 60) {
                 prevPhoto(); // Deslizou para a direita -> foto anterior
             }
+        }
+
+        // --- CONVERSOR DE LINKS DO GOOGLE DRIVE ---
+        function convertGoogleDriveLink(url) {
+            url = url.trim();
+            // Expressão regular para capturar o ID do arquivo do Google Drive
+            const driveRegExp = /(?:https?:\/\/)?(?:drive\.google\.com\/)(?:file\/d\/|open\?id=)([^/\?]+)/;
+            const match = url.match(driveRegExp);
+            
+            if (match && match[1]) {
+                const fileId = match[1];
+                // Retorna o link direto em formato de visualização exportável (ignora CSP de download)
+                return `https://drive.google.com/uc?export=view&id=${fileId}`;
+            }
+            return url;
         }
 
         // --- MODAL DE CONFIRMAÇÃO CUSTOMIZADO ---
@@ -894,11 +915,12 @@
 
             const urls = urlsText.split('\n').map(u => u.trim()).filter(u => u.length > 0);
             urls.forEach((url) => {
+                const convertedUrl = convertGoogleDriveLink(url);
                 const padNum = String(photoIndex).padStart(2, '0');
                 photoObjects.push({
                     id: Date.now() + photoIndex,
                     code: `${code}-${padNum}`,
-                    url: url
+                    url: convertedUrl
                 });
                 photoIndex++;
             });
@@ -931,20 +953,6 @@
                 
                 renderAdminDashboard();
                 showToast("Galeria removida.");
-            }
-        }
-
-        function copySubmissionData(code, clientName) {
-            const sel = selections.find(s => s.clientCode === code && s.clientName === clientName);
-            if (sel) {
-                const text = `FOTOS SELECIONADAS (${sel.clientName}): ${sel.selectedCodes.join(', ')}`;
-                const tempInput = document.createElement("textarea");
-                tempInput.value = text;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand("copy");
-                document.body.removeChild(tempInput);
-                showToast("Lista copiada!");
             }
         }
 
@@ -999,6 +1007,7 @@
             updateLightboxContent();
         }
 
+        // Passar imagem para frente
         function nextPhoto() {
             currentLightboxIndex++;
             if (currentLightboxIndex >= currentActiveGallery.photos.length) {
