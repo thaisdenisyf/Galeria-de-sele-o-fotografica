@@ -445,17 +445,17 @@
             }
         }
 
-        // --- CONVERSOR DE LINKS DO GOOGLE DRIVE ---
+        // --- CONVERSOR DE LINKS DO GOOGLE DRIVE CORRIGIDO ---
         function convertGoogleDriveLink(url) {
             url = url.trim();
-            // Expressão regular para capturar o ID do arquivo do Google Drive
-            const driveRegExp = /(?:https?:\/\/)?(?:drive\.google\.com\/)(?:file\/d\/|open\?id=)([^/\?]+)/;
+            // Regex completa para capturar o ID de arquivos do Google Drive
+            const driveRegExp = /(?:https?:\/\/)?(?:drive\.google\.com\/)(?:file\/d\/|open\?id=)([^/\?&]+)/;
             const match = url.match(driveRegExp);
             
             if (match && match[1]) {
                 const fileId = match[1];
-                // Retorna o link direto em formato de visualização exportável (ignora CSP de download)
-                return `https://drive.google.com/uc?export=view&id=${fileId}`;
+                // RETORNA O ENDEREÇO DA API DE IMAGEM DO GOOGLE QUE IGNORA BLOQUEIO DE COOKIES E CORS
+                return `https://lh3.googleusercontent.com/d/${fileId}`;
             }
             return url;
         }
@@ -559,7 +559,7 @@
                 
                 card.innerHTML = `
                     <div onclick="openLightbox(${currentActiveGallery.photos.indexOf(photo)})" class="aspect-[3/4] overflow-hidden bg-neutral-900 relative">
-                        <img src="${photo.url}" alt="${photo.code}" class="w-full h-full object-cover select-none" loading="lazy">
+                        <img src="${photo.url}" alt="${photo.code}" class="w-full h-full object-cover select-none animate-pulse bg-neutral-900" onload="this.classList.remove('animate-pulse')" onerror="this.src='https://images.unsplash.com/photo-1590086782957-93c06ef21604?auto=format&fit=crop&w=400&q=80'; this.classList.remove('animate-pulse')" loading="lazy">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/25 opacity-0 md:group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3">
                             <span class="text-xs tracking-wider text-white font-semibold bg-black/60 px-2.5 py-1 rounded-md self-start">${photo.code}</span>
                             <div class="text-white text-[10px] flex items-center gap-1.5 justify-center bg-black/40 backdrop-blur-sm p-1.5 rounded-lg self-center">
@@ -958,6 +958,7 @@
 
         // --- LIGHTBOX (ZOOM) ---
 
+        // Abrir modal do Lightbox
         function openLightbox(index) {
             currentLightboxIndex = index;
             const lightbox = document.getElementById('lightbox');
