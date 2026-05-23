@@ -1299,97 +1299,95 @@
         }
 
         function updateLightboxUI() {
+            if (!currentActiveGallery || !currentActiveGallery.photos[currentLightboxIndex]) return;
+
             const photo = currentActiveGallery.photos[currentLightboxIndex];
             const isSelected = clientSelections.has(photo.id);
             const selectBtn = document.getElementById('lightboxSelectBtn');
 
             if (isSelected) {
                 selectBtn.className = "flex items-center gap-2 bg-red-600 text-white hover:bg-red-700 px-4 py-2.5 rounded-full text-xs font-semibold transition-all min-h-[40px]";
-                selectBtn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Escolhida`;
+                selectBtn.innerHTML = `
+                    <i data-lucide="heart" class="w-4 h-4 fill-current"></i>
+                    <span>Selecionada</span>
+                `;
             } else {
                 selectBtn.className = "flex items-center gap-2 bg-neutral-900 border border-neutral-800 text-white hover:bg-neutral-800 px-4 py-2.5 rounded-full text-xs font-semibold transition-all min-h-[40px]";
-                selectBtn.innerHTML = `<i data-lucide="heart" class="w-4 h-4"></i> Selecionar`;
+                selectBtn.innerHTML = `
+                    <i data-lucide="heart" class="w-4 h-4"></i>
+                    <span>Selecionar</span>
+                `;
             }
-            
+
             selectBtn.onclick = () => toggleSelectPhoto(photo.id);
             lucide.createIcons();
         }
 
         function prevPhoto() {
+            if (!currentActiveGallery) return;
+
             currentLightboxIndex--;
             if (currentLightboxIndex < 0) {
                 currentLightboxIndex = currentActiveGallery.photos.length - 1;
             }
+
             updateLightboxContent();
         }
 
-        // Passar imagem para frente
         function nextPhoto() {
+            if (!currentActiveGallery) return;
+
             currentLightboxIndex++;
             if (currentLightboxIndex >= currentActiveGallery.photos.length) {
                 currentLightboxIndex = 0;
             }
+
             updateLightboxContent();
         }
 
-        // --- UTILITÁRIOS ---
-
-        function showCustomAlert(message) {
-            showToast(message);
+        function scrollToSelection() {
+            document.getElementById('reviewSection').scrollIntoView({
+                behavior: 'smooth'
+            });
         }
 
         function showToast(message) {
             const toast = document.getElementById('toast');
             document.getElementById('toastMessage').innerText = message;
-            
+
             toast.classList.remove('translate-y-20', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
 
             setTimeout(() => {
                 toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3500);
+            }, 3000);
+
+            lucide.createIcons();
         }
+
+        function showCustomAlert(message) {
+            showToast(message);
+        }
+
     </script>
+
     <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-  // 1. COPIE AS SUAS CREDENCIAIS DO FIREBASE AQUI
-  const firebaseConfig = {
-    apiKey: "SUA_API_KEY_AQUI",
-    authDomain: "SEU_PROJETO.firebaseapp.com",
-    projectId: "SEU_PROJETO_ID",
-    storageBucket: "SEU_PROJETO.appspot.com",
-    messagingSenderId: "SEU_ID",
-    appId: "SEU_APP_ID"
-  };
+      const firebaseConfig = {
+        apiKey: "AIzaSyAXQzjHeRpauZGy_h7pzs9PeHbFg4hh2fc",
+        authDomain: "seletor-eabd5.firebaseapp.com",
+        projectId: "seletor-eabd5",
+        storageBucket: "seletor-eabd5.firebasestorage.app",
+        messagingSenderId: "359410455422",
+        appId: "1:359410455422:web:102fb9ccca2e262a43592f"
+      };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+      const app = initializeApp(firebaseConfig);
 
-  // 2. FUNÇÃO PARA SALVAR (Substitui o seu localStorage.setItem)
-  async function salvarDadosNoCloud(dados) {
-    try {
-      await setDoc(doc(db, "portfolio", "minhasFotos"), dados);
-      console.log("Dados salvos na nuvem!");
-    } catch (e) {
-      console.error("Erro ao salvar: ", e);
-    }
-  }
+      window.firebaseApp = app;
+    </script>
 
-  // 3. FUNÇÃO PARA LER (Substitui o seu localStorage.getItem)
-  async function carregarDadosDoCloud() {
-    const docRef = doc(db, "portfolio", "minhasFotos");
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      console.log("Nenhum dado encontrado na nuvem.");
-      return null;
-    }
-  }
-</script>
 </body>
 </html>
