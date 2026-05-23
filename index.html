@@ -1351,5 +1351,45 @@
             }, 3500);
         }
     </script>
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+  // 1. COPIE AS SUAS CREDENCIAIS DO FIREBASE AQUI
+  const firebaseConfig = {
+    apiKey: "SUA_API_KEY_AQUI",
+    authDomain: "SEU_PROJETO.firebaseapp.com",
+    projectId: "SEU_PROJETO_ID",
+    storageBucket: "SEU_PROJETO.appspot.com",
+    messagingSenderId: "SEU_ID",
+    appId: "SEU_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 2. FUNÇÃO PARA SALVAR (Substitui o seu localStorage.setItem)
+  async function salvarDadosNoCloud(dados) {
+    try {
+      await setDoc(doc(db, "portfolio", "minhasFotos"), dados);
+      console.log("Dados salvos na nuvem!");
+    } catch (e) {
+      console.error("Erro ao salvar: ", e);
+    }
+  }
+
+  // 3. FUNÇÃO PARA LER (Substitui o seu localStorage.getItem)
+  async function carregarDadosDoCloud() {
+    const docRef = doc(db, "portfolio", "minhasFotos");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.log("Nenhum dado encontrado na nuvem.");
+      return null;
+    }
+  }
+</script>
 </body>
 </html>
